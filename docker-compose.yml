@@ -9,7 +9,7 @@ services:
     environment:
       - MONGO_URI=${MONGO_URI}
       - FIREBASE_CREDS_JSON=${FIREBASE_CREDS_JSON}
-      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:8095}
 
   # ── Node / Express backend ─────────────────────────────────────────────────
   backend-node:
@@ -21,7 +21,7 @@ services:
       - MONGO_URI=${MONGO_URI}
       - FIREBASE_CREDS_JSON=${FIREBASE_CREDS_JSON}
       - PORT=3001
-      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:8095}
 
   # ── React / Vite frontend (built, served with 'serve') ────────────────────
   frontend:
@@ -34,6 +34,8 @@ services:
         VITE_FIREBASE_STORAGE_BUCKET: ${VITE_FIREBASE_STORAGE_BUCKET}
         VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID}
         VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID}
+        VITE_PYTHON_API_URL: ${VITE_PYTHON_API_URL}
+        VITE_NODE_API_URL: ${VITE_NODE_API_URL}
     container_name: devnotes-frontend
     ports:
       - "8095:8095"

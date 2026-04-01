@@ -3,8 +3,8 @@ import { auth } from './firebase'
 
 // Both backends expose the same endpoints — only the port differs
 const BACKEND_URLS = {
-  python: 'http://localhost:8000',
-  node: 'http://localhost:3001',
+  python: import.meta.env.VITE_PYTHON_API_URL || 'http://localhost:8096',
+  node: import.meta.env.VITE_NODE_API_URL || 'http://localhost:8097',
 }
 
 // Read which backend to use from localStorage (set by BackendToggle)
