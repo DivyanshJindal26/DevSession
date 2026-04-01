@@ -1,0 +1,39 @@
+services:
+
+  # ── Python / FastAPI backend ───────────────────────────────────────────────
+  backend-python:
+    build: ./backend-python
+    container_name: devnotes-python
+    ports:
+      - "8096:8000"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - FIREBASE_CREDS_JSON=${FIREBASE_CREDS_JSON}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost}
+
+  # ── Node / Express backend ─────────────────────────────────────────────────
+  backend-node:
+    build: ./backend-node
+    container_name: devnotes-node
+    ports:
+      - "8097:3001"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - FIREBASE_CREDS_JSON=${FIREBASE_CREDS_JSON}
+      - PORT=3001
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost}
+
+  # ── React / Vite frontend (built, served with 'serve') ────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_FIREBASE_API_KEY: ${VITE_FIREBASE_API_KEY}
+        VITE_FIREBASE_AUTH_DOMAIN: ${VITE_FIREBASE_AUTH_DOMAIN}
+        VITE_FIREBASE_PROJECT_ID: ${VITE_FIREBASE_PROJECT_ID}
+        VITE_FIREBASE_STORAGE_BUCKET: ${VITE_FIREBASE_STORAGE_BUCKET}
+        VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID}
+        VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID}
+    container_name: devnotes-frontend
+    ports:
+      - "8095:8095"
