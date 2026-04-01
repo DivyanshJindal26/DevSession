@@ -14,7 +14,7 @@ export default function Dashboard({ user }) {
     setLoading(true)
     try {
       const res = await api.get('/notes')
-      setNotes(res.data)
+      setNotes(Array.isArray(res.data) ? res.data : [])
     } catch (err) {
       console.error('Failed to fetch notes:', err)
     } finally {

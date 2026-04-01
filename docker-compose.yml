@@ -9,7 +9,7 @@ services:
     environment:
       - MONGO_URI=${MONGO_URI}
       - FIREBASE_CREDS_JSON=${FIREBASE_CREDS_JSON}
-      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:8095}
+      - CORS_ORIGIN=${CORS_ORIGIN:-https://notes.iitmandi.co.in}
 
   # ── Node / Express backend ─────────────────────────────────────────────────
   backend-node:
@@ -21,7 +21,7 @@ services:
       - MONGO_URI=${MONGO_URI}
       - FIREBASE_CREDS_JSON=${FIREBASE_CREDS_JSON}
       - PORT=3001
-      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:8095}
+      - CORS_ORIGIN=${CORS_ORIGIN:-https://notes.iitmandi.co.in}
 
   # ── React / Vite frontend (built, served with 'serve') ────────────────────
   frontend:

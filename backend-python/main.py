@@ -13,7 +13,7 @@ app = FastAPI(title="DevNotes API — Python/FastAPI")
 # Allow the React dev server to call this backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("CORS_ORIGIN", "http://localhost")],
+    allow_origins=os.getenv("CORS_ORIGIN", "http://localhost:8095").split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

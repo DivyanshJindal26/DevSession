@@ -7,7 +7,8 @@ const Note = require('./noteModel')
 
 const app = express()
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost' }))
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:8095').split(',')
+app.use(cors({ origin: allowedOrigins }))
 app.use(express.json())
 
 connectDB()
