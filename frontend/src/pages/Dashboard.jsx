@@ -9,6 +9,7 @@ export default function Dashboard({ user }) {
   const [selectedNote, setSelectedNote] = useState(null)
   const [isCreating, setIsCreating] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [saveError, setSaveError] = useState(null)
 
   const fetchNotes = async () => {
     setLoading(true)
@@ -27,21 +28,35 @@ export default function Dashboard({ user }) {
   }, [])
 
   const handleCreate = async (data) => {
-    const res = await api.post('/notes', data)
-    setNotes([res.data, ...notes])
-    setIsCreating(false)
+    try {
+      setSaveError(null)
+      const res = await api.post('/notes', data)
+      setNotes(prev => [res.data, ...prev])
+      setIsCreating(false)
+    } catch (err) {
+      setSaveError(err.response?.data?.detail || err.response?.data?.error || 'Failed to save note')
+    }
   }
 
   const handleUpdate = async (id, data) => {
-    const res = await api.put(`/notes/${id}`, data)
-    setNotes(notes.map(n => (n._id === id ? res.data : n)))
-    setSelectedNote(null)
+    try {
+      setSaveError(null)
+      const res = await api.put(`/notes/${id}`, data)
+      setNotes(prev => prev.map(n => (n._id === id ? res.data : n)))
+      setSelectedNote(null)
+    } catch (err) {
+      setSaveError(err.response?.data?.detail || err.response?.data?.error || 'Failed to update note')
+    }
   }
 
   const handleDelete = async (id) => {
-    await api.delete(`/notes/${id}`)
-    setNotes(notes.filter(n => n._id !== id))
-    if (selectedNote?._id === id) setSelectedNote(null)
+    try {
+      await api.delete(`/notes/${id}`)
+      setNotes(prev => prev.filter(n => n._id !== id))
+      if (selectedNote?._id === id) setSelectedNote(null)
+    } catch (err) {
+      setSaveError(err.response?.data?.detail || err.response?.data?.error || 'Failed to delete note')
+    }
   }
 
   const openEditor = isCreating || selectedNote !== null
@@ -49,6 +64,13 @@ export default function Dashboard({ user }) {
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col">
       <Navbar user={user} onBackendChange={fetchNotes} />
+
+      {saveError && (
+        <div className="bg-red-900 border-b border-red-700 text-red-200 text-xs px-6 py-2 flex items-center justify-between">
+          <span>{saveError}</span>
+          <button onClick={() => setSaveError(null)} className="text-red-400 hover:text-red-200 ml-4">✕</button>
+        </div>
+      )}
 
       <div className="flex flex-1 overflow-hidden" style={{ height: 'calc(100vh - 56px)' }}>
 
